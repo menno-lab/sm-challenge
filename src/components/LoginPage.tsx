@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 
 interface IProps {
-    setisLoggedIn: React.Dispatch<React.SetStateAction<any>>
+    setisLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
     setslToken: React.Dispatch<React.SetStateAction<string>>
 }
 
 const LoginPage: React.FC<IProps> = ({ setisLoggedIn, setslToken }) => {
 
     const [errorMessage, seterrorMessage] = useState("");
-
     const [loginDetails, setloginDetails] = useState({
         name: "",
         email: ""
@@ -22,7 +21,6 @@ const LoginPage: React.FC<IProps> = ({ setisLoggedIn, setslToken }) => {
     }
 
     const handleSubmit = () => {
-        console.log(loginDetails);
         fetch("https://api.supermetrics.com/assignment/register", {
             method: "POST",
             headers: {

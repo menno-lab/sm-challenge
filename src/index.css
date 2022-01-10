@@ -7,7 +7,56 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* TOPBAR */
+
+.top-bar {
+  background-color: yellow;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+  background-color: red;
+  width: 25%;
+  float: left;
+}
+
+.author-wrapper {
+  background-color: green;
+  margin: 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.author-name {
+  float: left;
+}
+
+.author-post-count {
+  text-align: right;
+  padding-right: 20px;
+}
+
+/* POSTS BODY */
+
+.posts-body {
+  background-color: blue;
+  width: calc(75% - 80px);
+  float: right;
+  padding: 40px;
+
+}
+
+.post-wrapper {
+  border: 1px solid black;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+  text-align: left;
 }

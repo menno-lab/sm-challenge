@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import './App.css';
 import List from './components/List';
+import LoginPage from './components/LoginPage';
 
-interface IState {
+export interface IState {
   people: {
     name: string
     age: number
@@ -10,6 +11,7 @@ interface IState {
     note?: string
   }[]
 }
+
 
 function App() {
 
@@ -22,11 +24,24 @@ function App() {
     }
   ])
 
+  const [isLoggedIn, setisLoggedIn] = useState<any>(false);
 
+  const [slToken, setslToken] = useState("");
+
+  // if user is logged in, return the application
+  if (isLoggedIn) {
+    return (
+      <div className="App">
+        <h1>Supermetrics Front-end Assignment</h1>
+        <List people={people} />
+      </div>     
+    )
+  }
+
+  // if not logged in or token expired, return login page
   return (
     <div className="App">
-      <h1>Supermetrics Front-end Assignment</h1>
-      <List people={people} />
+      <LoginPage setisLoggedIn={setisLoggedIn} setslToken={setslToken} />
     </div>
   );
 }

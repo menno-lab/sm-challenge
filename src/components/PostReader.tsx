@@ -10,16 +10,9 @@ const PostReader: React.FC<IProps> = ({ setisLoggedIn, slToken }) => {
 
     const [pageNumber, setpageNumber] = useState(1);    
     const [isChronologicallySorted, setisChronologicallySorted] = useState(true);
-    const {error, loading, posts, sortedPosts, postAuthors, setPosts, setAuthors } = usePosts({ token: slToken, page: pageNumber });
+    const {error, loading, posts, sortedPosts, postAuthors, setPosts, setAuthors, filteredAuthors, setfilteredAuthors } = usePosts({ token: slToken, page: pageNumber });
     
     const [authorSearchValue, setAuthorSearchValue] = useState("");
-
-    const [filteredAuthors, setfilteredAuthors] = useState<any>();
-
-    useEffect(() => {
-        setfilteredAuthors(postAuthors);
-    }, [])
-
 
     // click on author on sidebar, filters posts by author
     const handleAuthorClick = (name: string) => {
@@ -56,7 +49,7 @@ const PostReader: React.FC<IProps> = ({ setisLoggedIn, slToken }) => {
     const handleAuthorSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setAuthorSearchValue(e.target.value);
         const filtered_authors = postAuthors?.filter(item => item.from_name.toLowerCase().includes(e.target.value));
-        setAuthors(filtered_authors);                 
+        setfilteredAuthors(filtered_authors);                 
     }
 
     const handleLogout = () => {
@@ -99,8 +92,7 @@ const PostReader: React.FC<IProps> = ({ setisLoggedIn, slToken }) => {
             {
                 error ? <div>error: {error} <button onClick={handleLogout}>logout</button></div>
                 :                           
-            <div className='page'>
-                                
+            <div className='page'>                                
                 <div className='sidebar'>
                     <div className='logout-btn'>
                         <button onClick={handleLogout}>logout</button>

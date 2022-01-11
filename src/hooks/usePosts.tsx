@@ -25,6 +25,7 @@ export default function usePosts({ token, page }: IUsePosts) {
     const [posts, setPosts] = useState<Post[]>();
     const [sortedPosts, setSortedPosts] = useState<Post[]>();  
     const [authors, setAuthors] = useState<UniqueAuthors[]>();
+    const [filteredAuthors, setFilteredAuthors] = useState<UniqueAuthors[]>();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string>();
 
@@ -40,7 +41,8 @@ export default function usePosts({ token, page }: IUsePosts) {
                             // transform the result to our needed objects    
                             if (data.data) {
                                 // if successful fetch
-                                postAuthors(data.data.posts);
+                                const authors = postAuthors(data.data.posts);
+                                setFilteredAuthors(authors)
                                 setPosts(data.data.posts);
                                 sortPosts(data.data.posts);
                             }
@@ -87,5 +89,5 @@ export default function usePosts({ token, page }: IUsePosts) {
         }
         return undefined
     }
-    return { error, loading, posts, sortedPosts: sortedPosts, postAuthors: authors, setPosts: setSortedPosts, setAuthors: setAuthors }
+    return { error, loading, posts, sortedPosts: sortedPosts, postAuthors: authors, setPosts: setSortedPosts, setAuthors: setAuthors, filteredAuthors, setFilteredAuthors }
 }

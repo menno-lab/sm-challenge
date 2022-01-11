@@ -1,6 +1,5 @@
-import React, { ReactElement, useState, useEffect } from 'react';
+import React, { ReactElement, useState } from 'react';
 import usePosts from '../hooks/usePosts';
-import { useParams } from "react-router-dom";
 
 interface IProps {
     slToken: string
@@ -11,17 +10,9 @@ const PostReader: React.FC<IProps> = ({ setisLoggedIn, slToken }) => {
 
     const [pageNumber, setpageNumber] = useState(1);    
     const [isChronologicallySorted, setisChronologicallySorted] = useState(true);
-    const { error, loading, posts, sortedPosts, postAuthors, setPosts, setAuthors, filteredAuthors, setFilteredAuthors } = usePosts({ token: slToken, page: pageNumber });
-    
+    const { error, loading, posts, sortedPosts, filteredAuthors, postAuthors, setPosts, setFilteredAuthors } = usePosts({ token: slToken, page: pageNumber });
     const [authorSearchValue, setAuthorSearchValue] = useState("");
     const [postSearchValue, setPostSearchValue] = useState("");
-
-    //const search_params = useParams();
-    
-    useEffect(() => {        
-        const filtered_posts = posts?.filter(post => post.from_name.includes("Macie"));
-        setPosts(filtered_posts);
-    }, [])
 
     // click on author on sidebar, filters posts by author
     const handleAuthorClick = (name: string) => {       
@@ -101,48 +92,49 @@ const PostReader: React.FC<IProps> = ({ setisLoggedIn, slToken }) => {
         ))
     }
 
-
     return (     
         <div className='posts-page'>
             {
                 error ? <div>error: {error} <button onClick={handleLogout}>logout</button></div>
-                :                           
-            <div className='page'>                                
-                <div className='sidebar'>
-                    <div className='logout-btn'>
-                        <button onClick={handleLogout}>logout</button>
+                : 
+                loading ? <div>Loading...</div>
+                :                          
+                <div className='page'>                                
+                    <div className='sidebar'>
+                        <div className='logout-btn'>
+                            <button onClick={handleLogout}>logout</button>
+                        </div>
+                        <div className='page-buttons'>                        
+                            <span>Page: {pageNumber}</span>
+                            {pageNumber > 1 ? <button onClick={decreasePageNumber}>←</button> : ""}
+                            {pageNumber < 10 ? <button onClick={increasePageNumber}>→</button> : ""}                                          
+                        </div>
+                        <div className='sort-buttons'>
+                            <span>Sort:</span>
+                            <button onClick={sortChronologically}>↓</button>
+                            <button onClick={sortChronologicallyReverse}>↑</button>  
+                        </div>
+                        <div>
+                            <input type="text" placeholder='Search posts' value={postSearchValue} onChange={handlePostSearch} />
+                            <input type="text" placeholder='Search authors' value={authorSearchValue} onChange={handleAuthorSearch} />                            
+                        </div>
+                        <div className='authors-section'>
+                            <table>
+                                <tbody>
+                                    {renderSideBar()}
+                                </tbody>
+                            </table>
+                        </div>                                                                  
                     </div>
-                    <div className='page-buttons'>                        
-                        <span>Page: {pageNumber}</span>
-                        {pageNumber > 1 ? <button onClick={decreasePageNumber}>←</button> : ""}
-                        {pageNumber < 10 ? <button onClick={increasePageNumber}>→</button> : ""}                                          
+                    <div className='posts-body'>
+                        <div className='posts-content'>
+                            <ul>
+                                {renderPosts()}
+                            </ul>
+                        </div>
+                        
                     </div>
-                    <div className='sort-buttons'>
-                        <span>Sort:</span>
-                        <button onClick={sortChronologically}>↓</button>
-                        <button onClick={sortChronologicallyReverse}>↑</button>  
-                    </div>
-                    <div>
-                        <input type="text" placeholder='Search posts' value={postSearchValue} onChange={handlePostSearch} />
-                        <input type="text" placeholder='Search authors' value={authorSearchValue} onChange={handleAuthorSearch} />                            
-                    </div>
-                    <div className='authors-section'>
-                        <table>
-                            <tbody>
-                                {renderSideBar()}
-                            </tbody>
-                        </table>
-                    </div>                                                                  
                 </div>
-                <div className='posts-body'>
-                    <div className='posts-content'>
-                        <ul>
-                            {renderPosts()}
-                        </ul>
-                    </div>
-                    
-                </div>
-            </div>
         } 
     </div>      
     )

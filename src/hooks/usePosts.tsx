@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useParams } from "react-router-dom";
 
 interface IUsePosts {
     token: string,
@@ -19,15 +20,22 @@ interface UniqueAuthors {
     count: number
 }
 
+interface SearchParams {
+    author: string
+}
+
 // this took takes the sl_token & page number and returns posts & authors objects
-export default function usePosts({ token, page }: IUsePosts) {
+export default function usePosts({ token, page }: IUsePosts) {    
     
     const [posts, setPosts] = useState<Post[]>();
-    const [sortedPosts, setSortedPosts] = useState<Post[]>();  
+    const [sortedPosts, setSortedPosts] = useState<Post[]>();
+    const [filteredPosts, setFilteredPosts] =  useState<Post[]>();
     const [authors, setAuthors] = useState<UniqueAuthors[]>();
     const [filteredAuthors, setFilteredAuthors] = useState<UniqueAuthors[]>();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string>();
+
+    const search_params:SearchParams = useParams();
 
     // fetch from the assignment endpoint, runs when component is loaded and when the page or token changes
     useEffect(() => {                       
@@ -39,12 +47,15 @@ export default function usePosts({ token, page }: IUsePosts) {
                         .then((response) => response.json())
                         .then(data => {                                                                          
                             // transform the result to our needed objects    
-                            if (data.data) {
+                            if (data.data) {                                
                                 // if successful fetch
                                 const authors = postAuthors(data.data.posts);
                                 setFilteredAuthors(authors)
                                 setPosts(data.data.posts);
                                 sortPosts(data.data.posts);
+                                if (search_params) {
+                                    filterPosts(data.data.posts); 
+                                }                                                                                                                   
                             }
                             if (data.error) {                                                    
                                 // if fetch returned an error                            
@@ -63,9 +74,17 @@ export default function usePosts({ token, page }: IUsePosts) {
     // sort posts by creation time
     function sortPosts(data: Post[]): Array<Post> {
         const sorted = data.sort((a: any,b: any) => (a.created_time > b.created_time) ? 1 : ((b.created_time > a.created_time) ? -1 : 0));
-        setSortedPosts(sorted);
+        setSortedPosts(sorted);        
         return sorted
+    }    
+
+    // filter by author in search param
+    function filterPosts(data: Post[]): Array<Post> {        
+        const filtered = data.filter(post => post.from_name.includes(search_params.author));
+        setFilteredPosts(filtered);        
+        return filtered
     }
+
 
     // create authors object by grouping posts by post.from_name and get the instances count
     function postAuthors(data: Post[]): Array<UniqueAuthors> | undefined {

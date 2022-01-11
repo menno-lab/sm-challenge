@@ -1,5 +1,6 @@
 import React, { ReactElement, useState, useEffect } from 'react';
 import usePosts from '../hooks/usePosts';
+import { useParams } from "react-router-dom";
 
 interface IProps {
     slToken: string
@@ -15,8 +16,15 @@ const PostReader: React.FC<IProps> = ({ setisLoggedIn, slToken }) => {
     const [authorSearchValue, setAuthorSearchValue] = useState("");
     const [postSearchValue, setPostSearchValue] = useState("");
 
+    //const search_params = useParams();
+    
+    useEffect(() => {        
+        const filtered_posts = posts?.filter(post => post.from_name.includes("Macie"));
+        setPosts(filtered_posts);
+    }, [])
+
     // click on author on sidebar, filters posts by author
-    const handleAuthorClick = (name: string) => {
+    const handleAuthorClick = (name: string) => {       
         const filtered_posts = posts?.filter(post => post.from_name.includes(name));
         setPosts(filtered_posts);
     }
@@ -58,7 +66,6 @@ const PostReader: React.FC<IProps> = ({ setisLoggedIn, slToken }) => {
         const filtered_posts = posts?.filter(item => item.message.toLowerCase().includes(e.target.value));
         setPosts(filtered_posts);                 
     }
-
 
     const handleLogout = () => {
         localStorage.removeItem('sl_token');

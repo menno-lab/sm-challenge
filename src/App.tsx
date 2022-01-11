@@ -10,14 +10,24 @@ function App() {
   const [slToken, setslToken] = useState("");
   const [redirect, setRedirect] = useState("");
 
+
   // check local storage for sl_token
-  useEffect(() => {
+  useEffect(() => {  
+    
+    
     const sl_token: any = JSON.parse(localStorage.getItem('sl_token') || '{}');
     if ('sl_token' in sl_token) {
       // if token is found in local storage, the login can be persisted
       setslToken(sl_token.sl_token);
       setisLoggedIn(true);
-      setRedirect("/posts");
+      // check if url contains a search parameter
+      const params = window.location.href.split("posts/")[1];
+      if (params) {
+        setRedirect("/posts/"+params);
+      } else {
+        setRedirect("/posts");
+      }
+      
     } else {
       setRedirect("/login");
     }
@@ -33,7 +43,7 @@ function App() {
           <Route path="/login">
             <LoginPage setisLoggedIn={setisLoggedIn} setslToken={setslToken} />
           </Route>
-          <Route path="/posts">
+          <Route path="/posts/:author?">
             <PostReader setisLoggedIn={setisLoggedIn} slToken={slToken} />
           </Route>
           <Route path="/">

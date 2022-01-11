@@ -1,32 +1,48 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import LoginPage from './components/LoginPage';
 import PostReader from './components/PostReader';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 
 function App() {
 
   const [isLoggedIn, setisLoggedIn] = useState<boolean>(false);
   const [slToken, setslToken] = useState("");
+  const [redirect, setRedirect] = useState("");
 
-  function ComponentToRender(): JSX.Element {
-    // if user is logged in, return the application
-    if (isLoggedIn) {
-      return (
-          <PostReader setisLoggedIn={setisLoggedIn} slToken={slToken} />    
-      )
+  // check local storage for sl_token
+  useEffect(() => {
+    const sl_token: any = JSON.parse(localStorage.getItem('sl_token') || '{}');
+    if ('sl_token' in sl_token) {
+      // if token is found in local storage, the login can be persisted
+      setslToken(sl_token.sl_token);
+      setisLoggedIn(true);
+      setRedirect("/posts");
+    } else {
+      setRedirect("/login");
     }
-    // if not logged in or token expired/invalid, return login page    
-    return (      
-      <LoginPage setisLoggedIn={setisLoggedIn} setslToken={setslToken} />    
-    )    
-  }
+  }, [isLoggedIn]);
 
-return (
-  <div className="App">
-     <ComponentToRender />
-  </div>
-);
+  return (
+    <div className="App">
+      <BrowserRouter>
+      {
+        redirect ? <Redirect to={redirect} /> : ""
+      }
+        <Switch>
+          <Route path="/login">
+            <LoginPage setisLoggedIn={setisLoggedIn} setslToken={setslToken} />
+          </Route>
+          <Route path="/posts">
+            <PostReader setisLoggedIn={setisLoggedIn} slToken={slToken} />
+          </Route>
+          <Route path="/">
+            <Redirect to="/login"/>
+          </Route>
+        </Switch>
+      </BrowserRouter>
+    </div>
+  );
 }
 
 export default App;

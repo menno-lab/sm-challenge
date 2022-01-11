@@ -6,17 +6,18 @@ interface IProps {
     setisLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const PostReader: React.FC<IProps> = ({ setisLoggedIn, slToken }) => {
+const PostReader: React.FC<IProps> = ({ setisLoggedIn, slToken }) => {          
 
     const [pageNumber, setpageNumber] = useState(1);    
     const [isChronologicallySorted, setisChronologicallySorted] = useState(true);
-    const {error, loading, sortedPosts, postAuthors, setPosts, posts } = usePosts({ token: slToken, page: pageNumber });
-    
+    const {error, loading, posts, sortedPosts, postAuthors, setPosts, setAuthors } = usePosts({ token: slToken, page: pageNumber });
+
+    const [authorSearchValue, setAuthorSearchValue] = useState("");
+
 
     // click on author on sidebar, filters posts by author
     const handleAuthorClick = (name: string) => {
         const filtered_posts = posts?.filter(post => post.from_name.includes(name));
-        //const filtered_posts = allPosts.filter(post => post.from_name.includes(name));
         setPosts(filtered_posts);
     }
 
@@ -38,20 +39,38 @@ const PostReader: React.FC<IProps> = ({ setisLoggedIn, slToken }) => {
         }
     }
 
+    const increasePageNumber = () => {
+        setpageNumber(pageNumber + 1);
+    }
+
+    const decreasePageNumber = () => {
+        setpageNumber(pageNumber - 1);
+    }
+
+    const handleAuthorSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setAuthorSearchValue(e.target.value);
+        const filtered_authors = postAuthors?.filter(item => item.from_name.toLowerCase().includes(e.target.value));
+        setAuthors(filtered_authors);                 
+    }
+
+    const handleLogout = () => {
+        localStorage.removeItem('sl_token');
+        setisLoggedIn(false);
+        window.location.reload();
+    }
+
     // sidebar with authors + their posts count
     const renderSideBar = () => {
         return postAuthors?.map((author) => {
             return (
-                <li key={author.from_name} onClick={() => handleAuthorClick(author.from_name)}>
-                    <div className='author-wrapper'>
-                        <div className='author-name'>
+                <tr className='author-wrapper' key={author.from_name} onClick={() => handleAuthorClick(author.from_name)}>                    
+                        <td className='author-name'>
                             {author.from_name}
-                        </div>
-                        <div className='author-post-count'>
+                        </td>
+                        <td className='author-post-count'>
                             {author.count}
-                        </div>
-                    </div>
-                </li>
+                        </td>                    
+                </tr>
             )
         })
     }
@@ -75,24 +94,44 @@ const PostReader: React.FC<IProps> = ({ setisLoggedIn, slToken }) => {
                 <div>Loading...</div>
             )
         }
-        if (error) {
-            <div>Error: {error}</div>
-        }
-        return (
+        if (error) {                      
+            return (
+                <div>Error: {error}</div>
+            )
+        }        
+        return (   
             <div className='posts-page'>
-                <div className='top-bar'>
-                <button onClick={sortChronologically}>↓</button>
-                    <button onClick={sortChronologicallyReverse}>↑</button>               
+                <div className='top-bar'>                    
+                    <div className='page-buttons'>                        
+                        <span>Page: {pageNumber}</span>
+                        {pageNumber > 1 ? <button onClick={decreasePageNumber}>←</button> : ""}
+                        {pageNumber < 10 ? <button onClick={increasePageNumber}>→</button> : ""}                                          
+                    </div>
+                    <div className='sort-buttons'>
+                        <span>Sort:</span>
+                        <button onClick={sortChronologically}>↓</button>
+                        <button onClick={sortChronologicallyReverse}>↑</button>  
+                    </div>
+                    <div className='logout-btn'>
+                        <button onClick={handleLogout}>logout</button>
+                    </div>                           
                 </div>
-                <div className='sidebar'>
-                    <ul>
-                        {renderSideBar()}
-                    </ul>
-                </div>
-                <div className='posts-body'>
-                    <ul>
-                        {renderPosts()}
-                    </ul>
+                <div className='page-body'>                    
+                    <div className='sidebar'>
+                        <div>
+                            <input type="text" placeholder='Search' value={authorSearchValue} onChange={handleAuthorSearch} />
+                        </div>
+                        <table>
+                            <tbody>
+                                {renderSideBar()}
+                            </tbody>
+                        </table>                                          
+                    </div>
+                    <div className='posts-body'>
+                        <ul>
+                            {renderPosts()}
+                        </ul>
+                    </div>
                 </div>
             </div>
         )

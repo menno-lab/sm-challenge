@@ -13,18 +13,73 @@ ul {
   padding: 0;
 }
 
+/* LOGIN PAGE */
+
+.login-page {
+  margin: auto;
+  margin-top: 10%;
+  width: 500px;
+}
+
+.login-form {
+  padding-top: 20px;
+}
+
+.login-input {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.login-btn {
+  background-color: #04AA6D;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.login-btn:hover {
+ opacity: 0.8;
+}
+
 /* TOPBAR */
 
 .top-bar {
   background-color: yellow;
+  height: 30px;
+  padding: 10px 0;
+  width: 100%;
 }
 
-/* SIDEBAR */
+.page-buttons, .sort-buttons, .logout-btn {
+  display: inline-block;
+  width: 33%;
+}
+
+.page-buttons span, .sort-buttons span {
+  margin-right: 10px;
+}
+
+.logout-btn {
+  float: right;
+}
+
+/* POSTS PAGE STRUCTURE */
+
+.page-body {
+  height: 500px;
+}
 
 .sidebar {
   background-color: red;
-  width: 25%;
   float: left;
+  width: 25%;
 }
 
 .author-wrapper {
@@ -46,16 +101,16 @@ ul {
 /* POSTS BODY */
 
 .posts-body {
-  background-color: blue;
-  width: calc(75% - 80px);
+  background-color: blue;  
   float: right;
-  padding: 40px;
+  padding: 40px;  
+  width: calc(75% - 80px);
 }
 
 .post-wrapper {
   border: 1px solid black;
   margin-bottom: 20px;
   padding: 10px 20px;
-  cursor: pointer;
   text-align: left;
 }
+

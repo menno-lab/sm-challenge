@@ -21,22 +21,6 @@ function App() {
       <LoginPage setisLoggedIn={setisLoggedIn} setslToken={setslToken} />    
     )    
   }
-  
-//   return (
-//     <div className="App">
-//        <BrowserRouter>
-//         <Routes>
-//           {
-//             isLoggedIn ? (                  
-//               <Route path="/posts" element={<PostReader setisLoggedIn={setisLoggedIn} slToken={slToken} />} />
-//             ) :
-//               <Route path="/login" element={<LoginPage setisLoggedIn={setisLoggedIn} setslToken={setslToken} />} />
-//           }          
-//         </Routes>
-//       </BrowserRouter>
-//     </div>
-//   );
-// }
 
 return (
   <div className="App">

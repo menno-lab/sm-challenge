@@ -1,39 +1,22 @@
 import React, { ReactElement, useState } from 'react';
-
-import usePosts from '../hooks/usePosts'
+import usePosts from '../hooks/usePosts';
 
 interface IProps {
     slToken: string
     setisLoggedIn: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-interface IState {
-    posts: {
-        created_time: string
-        from_id: string
-        from_name: string
-        id: string
-        message: string
-        type: string
-    }[],
-    authors: {
-        name: string
-        post_count: number
-    }[]
-
-}
-
 const PostReader: React.FC<IProps> = ({ setisLoggedIn, slToken }) => {
 
-    const [pageNumber, setpageNumber] = useState(1);
-    
+    const [pageNumber, setpageNumber] = useState(1);    
     const [isChronologicallySorted, setisChronologicallySorted] = useState(true);
-
-    const {loading, error, sortedPosts, postAuthors, setPosts, data } = usePosts({ token: slToken, pagination: 1 });
+    const {error, loading, sortedPosts, postAuthors, setPosts, posts } = usePosts({ token: slToken, page: pageNumber });
+    
 
     // click on author on sidebar, filters posts by author
     const handleAuthorClick = (name: string) => {
-        const filtered_posts = data?.filter(post => post.from_name.includes(name));
+        const filtered_posts = posts?.filter(post => post.from_name.includes(name));
+        //const filtered_posts = allPosts.filter(post => post.from_name.includes(name));
         setPosts(filtered_posts);
     }
 
@@ -55,6 +38,7 @@ const PostReader: React.FC<IProps> = ({ setisLoggedIn, slToken }) => {
         }
     }
 
+    // sidebar with authors + their posts count
     const renderSideBar = () => {
         return postAuthors?.map((author) => {
             return (
@@ -72,6 +56,7 @@ const PostReader: React.FC<IProps> = ({ setisLoggedIn, slToken }) => {
         })
     }
 
+    // posts body
     const renderPosts = (): ReactElement[] | undefined => {
         return sortedPosts?.map(post => (
             <li key={post.id}>
@@ -83,24 +68,39 @@ const PostReader: React.FC<IProps> = ({ setisLoggedIn, slToken }) => {
         ))
     }
 
+    // determine which component to render in case of loading or error
+    function ComponentToRender(): JSX.Element {
+        if (loading) {
+            return (
+                <div>Loading...</div>
+            )
+        }
+        if (error) {
+            <div>Error: {error}</div>
+        }
+        return (
+            <div className='posts-page'>
+                <div className='top-bar'>
+                <button onClick={sortChronologically}>↓</button>
+                    <button onClick={sortChronologicallyReverse}>↑</button>               
+                </div>
+                <div className='sidebar'>
+                    <ul>
+                        {renderSideBar()}
+                    </ul>
+                </div>
+                <div className='posts-body'>
+                    <ul>
+                        {renderPosts()}
+                    </ul>
+                </div>
+            </div>
+        )
+    }
+
+    // return component
     return (
-       <div className='posts-page'>
-           <div className='top-bar'>
-           <button onClick={sortChronologically}>↓</button>
-               <button onClick={sortChronologicallyReverse}>↑</button>
-               
-           </div>
-           <div className='sidebar'>
-                <ul>
-                    {renderSideBar()}
-                </ul>
-           </div>
-           <div className='posts-body'>
-                <ul>
-                    {renderPosts()}
-                </ul>
-           </div>
-       </div>
+      <ComponentToRender />
     )
 }
 

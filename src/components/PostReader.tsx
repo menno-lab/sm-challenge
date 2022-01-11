@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useState, useEffect } from 'react';
 import usePosts from '../hooks/usePosts';
 
 interface IProps {
@@ -11,8 +11,14 @@ const PostReader: React.FC<IProps> = ({ setisLoggedIn, slToken }) => {
     const [pageNumber, setpageNumber] = useState(1);    
     const [isChronologicallySorted, setisChronologicallySorted] = useState(true);
     const {error, loading, posts, sortedPosts, postAuthors, setPosts, setAuthors } = usePosts({ token: slToken, page: pageNumber });
-
+    
     const [authorSearchValue, setAuthorSearchValue] = useState("");
+
+    const [filteredAuthors, setfilteredAuthors] = useState<any>();
+
+    useEffect(() => {
+        setfilteredAuthors(postAuthors);
+    }, [])
 
 
     // click on author on sidebar, filters posts by author
@@ -61,15 +67,15 @@ const PostReader: React.FC<IProps> = ({ setisLoggedIn, slToken }) => {
 
     // sidebar with authors + their posts count
     const renderSideBar = () => {
-        return postAuthors?.map((author) => {
+        return filteredAuthors?.map((author) => {
             return (
                 <tr className='author-wrapper' key={author.from_name} onClick={() => handleAuthorClick(author.from_name)}>                    
-                        <td className='author-name'>
-                            {author.from_name}
-                        </td>
-                        <td className='author-post-count'>
-                            {author.count}
-                        </td>                    
+                    <td className='author-name'>
+                        {author.from_name}
+                    </td>
+                    <td className='author-post-count'>
+                        {author.count}
+                    </td>                    
                 </tr>
             )
         })
@@ -87,21 +93,18 @@ const PostReader: React.FC<IProps> = ({ setisLoggedIn, slToken }) => {
         ))
     }
 
-    // determine which component to render in case of loading or error
-    function ComponentToRender(): JSX.Element {
-        if (loading) {
-            return (
-                <div>Loading...</div>
-            )
-        }
-        if (error) {                      
-            return (
-                <div>Error: {error}</div>
-            )
-        }        
-        return (   
-            <div className='posts-page'>
-                <div className='top-bar'>                    
+
+    return (     
+        <div className='posts-page'>
+            {
+                error ? <div>error: {error} <button onClick={handleLogout}>logout</button></div>
+                :                           
+            <div className='page'>
+                                
+                <div className='sidebar'>
+                    <div className='logout-btn'>
+                        <button onClick={handleLogout}>logout</button>
+                    </div>
                     <div className='page-buttons'>                        
                         <span>Page: {pageNumber}</span>
                         {pageNumber > 1 ? <button onClick={decreasePageNumber}>←</button> : ""}
@@ -112,34 +115,29 @@ const PostReader: React.FC<IProps> = ({ setisLoggedIn, slToken }) => {
                         <button onClick={sortChronologically}>↓</button>
                         <button onClick={sortChronologicallyReverse}>↑</button>  
                     </div>
-                    <div className='logout-btn'>
-                        <button onClick={handleLogout}>logout</button>
-                    </div>                           
-                </div>
-                <div className='page-body'>                    
-                    <div className='sidebar'>
-                        <div>
-                            <input type="text" placeholder='Search' value={authorSearchValue} onChange={handleAuthorSearch} />
-                        </div>
+                    <div>
+                        <input type="text" placeholder='Search posts' />
+                        <input type="text" placeholder='Search authors' value={authorSearchValue} onChange={handleAuthorSearch} />                            
+                    </div>
+                    <div className='authors-section'>
                         <table>
                             <tbody>
                                 {renderSideBar()}
                             </tbody>
-                        </table>                                          
-                    </div>
-                    <div className='posts-body'>
+                        </table>
+                    </div>                                                                  
+                </div>
+                <div className='posts-body'>
+                    <div className='posts-content'>
                         <ul>
                             {renderPosts()}
                         </ul>
                     </div>
+                    
                 </div>
             </div>
-        )
-    }
-
-    // return component
-    return (
-      <ComponentToRender />
+        } 
+    </div>      
     )
 }
 

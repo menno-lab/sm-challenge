@@ -36,7 +36,7 @@ export default function usePosts({ token, page }: IUsePosts) {
                     if (token) {                 
                         fetch(`https://api.supermetrics.com/assignment/posts?sl_token=${token}&page=${page}`)
                         .then((response) => response.json())
-                        .then(data => {                                              
+                        .then(data => {                                                                          
                             // transform the result to our needed objects    
                             if (data.data) {
                                 // if successful fetch
@@ -44,7 +44,7 @@ export default function usePosts({ token, page }: IUsePosts) {
                                 setPosts(data.data.posts);
                                 sortPosts(data.data.posts);
                             }
-                            if (data.error) {                            
+                            if (data.error) {                                                    
                                 // if fetch returned an error                            
                                 setError(data.error.message);
                             }                                        

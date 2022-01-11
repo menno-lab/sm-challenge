@@ -48,44 +48,46 @@ ul {
  opacity: 0.8;
 }
 
-/* TOPBAR */
 
-.top-bar {
-  background-color: yellow;
-  height: 30px;
-  padding: 10px 0;
-  width: 100%;
+
+
+/* POSTS PAGE STRUCTURE */
+
+.sidebar {
+  min-height: 100vh;  
+  background-color: red;
+  width: 250px;
+  float: left;
+
 }
 
+.posts-body {
+  background-color: blue;
+  padding: 50px;
+  float: right;
+  width: calc(100% - 350px);
+}
+
+/* SIDEBAR BUTTONS */
+
 .page-buttons, .sort-buttons, .logout-btn {
-  display: inline-block;
-  width: 33%;
+  width: 100%;
+  padding: 10px 0;
 }
 
 .page-buttons span, .sort-buttons span {
   margin-right: 10px;
 }
 
-.logout-btn {
-  float: right;
-}
+/* AUTHORS LIST */
 
-/* POSTS PAGE STRUCTURE */
-
-.page-body {
-  height: 500px;
-}
-
-.sidebar {
-  background-color: red;
-  float: left;
-  width: 25%;
+.authors-section {
+  width: 80%;
+  margin: 0 auto;
 }
 
 .author-wrapper {
   background-color: green;
-  margin: 10px;
-  padding: 5px 10px;
   cursor: pointer;
 }
 
@@ -98,19 +100,11 @@ ul {
   padding-right: 20px;
 }
 
-/* POSTS BODY */
-
-.posts-body {
-  background-color: blue;  
-  float: right;
-  padding: 40px;  
-  width: calc(75% - 80px);
-}
-
 .post-wrapper {
   border: 1px solid black;
   margin-bottom: 20px;
   padding: 10px 20px;
   text-align: left;
+  cursor: pointer;
 }
 

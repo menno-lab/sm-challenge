@@ -10,9 +10,10 @@ const PostReader: React.FC<IProps> = ({ setisLoggedIn, slToken }) => {
 
     const [pageNumber, setpageNumber] = useState(1);    
     const [isChronologicallySorted, setisChronologicallySorted] = useState(true);
-    const {error, loading, posts, sortedPosts, postAuthors, setPosts, setAuthors, filteredAuthors, setfilteredAuthors } = usePosts({ token: slToken, page: pageNumber });
+    const { error, loading, posts, sortedPosts, postAuthors, setPosts, setAuthors, filteredAuthors, setFilteredAuthors } = usePosts({ token: slToken, page: pageNumber });
     
     const [authorSearchValue, setAuthorSearchValue] = useState("");
+    const [postSearchValue, setPostSearchValue] = useState("");
 
     // click on author on sidebar, filters posts by author
     const handleAuthorClick = (name: string) => {
@@ -49,8 +50,15 @@ const PostReader: React.FC<IProps> = ({ setisLoggedIn, slToken }) => {
     const handleAuthorSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setAuthorSearchValue(e.target.value);
         const filtered_authors = postAuthors?.filter(item => item.from_name.toLowerCase().includes(e.target.value));
-        setfilteredAuthors(filtered_authors);                 
+        setFilteredAuthors(filtered_authors);                 
     }
+
+    const handlePostSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPostSearchValue(e.target.value);
+        const filtered_posts = posts?.filter(item => item.message.toLowerCase().includes(e.target.value));
+        setPosts(filtered_posts);                 
+    }
+
 
     const handleLogout = () => {
         localStorage.removeItem('sl_token');
@@ -108,7 +116,7 @@ const PostReader: React.FC<IProps> = ({ setisLoggedIn, slToken }) => {
                         <button onClick={sortChronologicallyReverse}>↑</button>  
                     </div>
                     <div>
-                        <input type="text" placeholder='Search posts' />
+                        <input type="text" placeholder='Search posts' value={postSearchValue} onChange={handlePostSearch} />
                         <input type="text" placeholder='Search authors' value={authorSearchValue} onChange={handleAuthorSearch} />                            
                     </div>
                     <div className='authors-section'>

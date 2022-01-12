@@ -84,8 +84,8 @@ const PostReader: React.FC<IProps> = ({ setisLoggedIn, slToken }) => {
     const renderPosts = (): ReactElement[] | undefined => {
         return sortedPosts?.map(post => (
             <li key={post.id}>
-                <div className='post-wrapper'>
-                    {post.created_time}
+                <div className='post-wrapper'>                    
+                    <span style={{ color: '#11999E' }}>{post.created_time}</span>
                     <p>{post.message}</p>
                 </div>
             </li>
@@ -99,42 +99,50 @@ const PostReader: React.FC<IProps> = ({ setisLoggedIn, slToken }) => {
                 : 
                 loading ? <div>Loading...</div>
                 :                          
-                <div className='page'>                                
-                    <div className='sidebar'>
-                        <div className='logout-btn'>
-                            <button onClick={handleLogout}>logout</button>
-                        </div>
-                        <div className='page-buttons'>                        
+                <div className='page'>
+                     <div className='navbar'>
+                         <div className='navbar-content'>
+
+                       
+                     <div className='navbar-item post-search'>
+                            <input className='search-input' type="text" placeholder='Search posts' value={postSearchValue} onChange={handlePostSearch} />                                                       
+                        </div>                        
+                        <div className='navbar-item page-buttons'>                        
                             <span>Page: {pageNumber}</span>
                             {pageNumber > 1 ? <button onClick={decreasePageNumber}>←</button> : ""}
                             {pageNumber < 10 ? <button onClick={increasePageNumber}>→</button> : ""}                                          
                         </div>
-                        <div className='sort-buttons'>
+                        <div className='navbar-item sort-buttons'>
                             <span>Sort:</span>
                             <button onClick={sortChronologically}>↓</button>
                             <button onClick={sortChronologicallyReverse}>↑</button>  
+                        </div>                        
+                        <div className='navbar-item logout-btn'>
+                            <button onClick={handleLogout}>logout</button>
                         </div>
-                        <div>
-                            <input type="text" placeholder='Search posts' value={postSearchValue} onChange={handlePostSearch} />
-                            <input type="text" placeholder='Search authors' value={authorSearchValue} onChange={handleAuthorSearch} />                            
                         </div>
-                        <div className='authors-section'>
-                            <table>
-                                <tbody>
-                                    {renderSideBar()}
-                                </tbody>
-                            </table>
-                        </div>                                                                  
                     </div>
-                    <div className='posts-body'>
-                        <div className='posts-content'>
-                            <ul>
-                                {renderPosts()}
-                            </ul>
+
+                    <div className='page-body'>
+                        <div className='sidebar'>                        
+                            <div className='authors-section'>
+                            <input className='search-input' type="text" placeholder='Search authors' value={authorSearchValue} onChange={handleAuthorSearch} /> 
+                                <table>
+                                    <tbody>
+                                        {renderSideBar()}
+                                    </tbody>
+                                </table>
+                            </div>                                                                  
+                        </div>                    
+                        <div className='posts-body'>
+                            <div className='posts-content'>
+                                <ul>
+                                    {renderPosts()}
+                                </ul>
+                            </div>                            
                         </div>
-                        
                     </div>
-                </div>
+                </div>                
         } 
     </div>      
     )

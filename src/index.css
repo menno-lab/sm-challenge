@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #E4F9F5;
 }
 
 ul {
@@ -18,6 +19,7 @@ ul {
 .login-page {
   margin: auto;
   margin-top: 10%;
+  text-align: center;
   width: 500px;
 }
 
@@ -35,8 +37,7 @@ ul {
 }
 
 .login-btn {
-  background-color: #04AA6D;
-  color: white;
+  background-color: #30E3CA;
   padding: 14px 20px;
   margin: 8px 0;
   border: none;
@@ -50,42 +51,79 @@ ul {
 
 /* POSTS PAGE STRUCTURE */
 
-.sidebar {
-  min-height: 100vh;  
-  background-color: red;
-  width: 250px;
-  float: left;
+.navbar {
+  background-color: #30E3CA;
+  text-align: right;
+  padding: 10px 0;
+  width: 100%;
+}
+
+.navbar-item {
+  width: calc(100% / 5);  
+  display: inline-block;
+  vertical-align: top;   
+  text-align: right;
+}
+
+.navbar-content {
+  max-width: 1200px;
+}
+
+.page-body {
+  position: flex;
+  top: 20px;
 
 }
 
+.sidebar {
+  background-color: #E4F9F5;
+  min-height: 100vh;
+  height: 100%;
+  padding-left: 50px;
+  padding-top: 20px;
+  float: left;
+  width: calc(25% - 50px);
+  max-width: 250px;
+}
+
 .posts-body {
-  background-color: blue;
-  padding: 50px;
-  float: right;
-  width: calc(100% - 350px);
+  background-color: #E4F9F5;
+  display: inline-block;
+  padding: 20px;
+  font-size: 0.9rem;
+  max-width: 800px;
+  width: calc(75% - 40px);
 }
 
 /* BUTTONS */
 
-.page-buttons, .sort-buttons, .logout-btn {
-  width: 100%;
-  padding: 10px 0;
+.logout-btn {
+  padding-right: 20px;
 }
 
-.page-buttons span, .sort-buttons span {
+.navbar-item span {
   margin-right: 10px;
+}
+
+.search-input {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
 }
 
 /* AUTHORS LIST */
 
-.authors-section {
-  width: 80%;
-  margin: 0 auto;
+.authors-section table {
+  padding-top: 10px;
 }
 
 .author-wrapper {
-  background-color: green;
+  background-color: #30E3CA;
   cursor: pointer;
+}
+
+.author-wrapper td {
+ padding: 5px 10px;
 }
 
 .author-name {
@@ -99,6 +137,8 @@ ul {
 
 .post-wrapper {
   border: 1px solid black;
+  border-radius: 10px;
+  background-color: #E4F9F5;
   margin-bottom: 20px;
   padding: 10px 20px;
   text-align: left;

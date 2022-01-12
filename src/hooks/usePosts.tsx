@@ -40,6 +40,7 @@ export default function usePosts({ token, page }: IUsePosts) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string>();
     
+    // checks for an author slug in the url
     const { author }: SearchParams = useParams();
 
     // fetch from the assignment endpoint, runs when component is loaded and when the page or token changes

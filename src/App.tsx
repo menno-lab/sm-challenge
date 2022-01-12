@@ -18,12 +18,15 @@ function App() {
       setisLoggedIn(true);
       // check if url contains a search parameter
       const params = window.location.href.split("posts/")[1];
+      // if yes, redirect to the right path
       if (params) {
         setRedirect("/posts/"+params);
       } else {
+        // redirect to all posts
         setRedirect("/posts");
       }
     } else {
+      // if no token found, go to login page
       setRedirect("/login");
     }
   }, [isLoggedIn]);

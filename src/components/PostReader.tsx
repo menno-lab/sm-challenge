@@ -38,26 +38,31 @@ const PostReader: React.FC<IProps> = ({ setisLoggedIn, slToken }) => {
         }
     }
 
+    // increase page number by 1
     const increasePageNumber = () => {
         setpageNumber(pageNumber + 1);
     }
 
+    // decrease page number by 1
     const decreasePageNumber = () => {
         setpageNumber(pageNumber - 1);
     }
 
+    // handles author search filter
     const handleAuthorSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setAuthorSearchValue(e.target.value);
         const filtered_authors = postAuthors?.filter(item => item.from_name.toLowerCase().includes(e.target.value));
         setFilteredAuthors(filtered_authors);                 
     }
 
+    // handles post search filter
     const handlePostSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPostSearchValue(e.target.value);
         const filtered_posts = posts?.filter(item => item.message.toLowerCase().includes(e.target.value));
         setPosts(filtered_posts);                 
     }
 
+    // logout function, removes token from local storage and set logged in to false
     const handleLogout = () => {
         localStorage.removeItem('sl_token');
         setisLoggedIn(false);
@@ -101,9 +106,7 @@ const PostReader: React.FC<IProps> = ({ setisLoggedIn, slToken }) => {
                 :                          
                 <div className='page'>
                      <div className='navbar'>
-                         <div className='navbar-content'>
-
-                       
+                         <div className='navbar-content'>                       
                      <div className='navbar-item post-search'>
                             <input className='search-input' type="text" placeholder='Search posts' value={postSearchValue} onChange={handlePostSearch} />                                                       
                         </div>                        
@@ -122,7 +125,6 @@ const PostReader: React.FC<IProps> = ({ setisLoggedIn, slToken }) => {
                         </div>
                         </div>
                     </div>
-
                     <div className='page-body'>
                         <div className='sidebar'>                        
                             <div className='authors-section'>

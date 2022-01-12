@@ -16,6 +16,7 @@ const LoginPage: React.FC<IProps> = ({ setisLoggedIn, setslToken }) => {
 
     const [redirect, setredirect] = useState("");
 
+    // handles input fields changes
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setloginDetails({
             ...loginDetails,
@@ -23,6 +24,7 @@ const LoginPage: React.FC<IProps> = ({ setisLoggedIn, setslToken }) => {
         })
     }
 
+    // submit function
     const handleSubmit = () => {
         fetch("https://api.supermetrics.com/assignment/register", {
             method: "POST",
@@ -37,10 +39,9 @@ const LoginPage: React.FC<IProps> = ({ setisLoggedIn, setslToken }) => {
         })
         .then(function(response) {
             return response.json();
-        }).then(function(payload) {      
-            console.log(payload);                 
+        }).then(function(payload) {             
             if ("data" in payload) {
-                // successful authentication
+                // if successful authentication
                 setslToken(payload.data.sl_token)
                 setisLoggedIn(true);
                 // store token in local storage so the login can persist
@@ -48,7 +49,7 @@ const LoginPage: React.FC<IProps> = ({ setisLoggedIn, setslToken }) => {
                 // redirect to posts page
                 setredirect("/posts")
             } else { 
-                // failed authentication               
+                // if failed authentication               
                 const error = payload.error.message;               
                 seterrorMessage(error);
             }            
